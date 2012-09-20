@@ -139,6 +139,6 @@ public class MemopadActivity extends Activity {
 			db.insertOrThrow("memoDB", null, values);
 			memos.close();
 			memoChanged = false;
-			}
 		}
+	}
 }
