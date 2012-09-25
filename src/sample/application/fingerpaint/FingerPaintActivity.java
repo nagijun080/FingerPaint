@@ -13,6 +13,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Display;
@@ -110,6 +112,7 @@ public class FingerPaintActivity extends Activity implements OnTouchListener{
 				imageNumber++;
 			} while (file.exists());
 			if (writeImage(file)) {
+				scanMedia(file.getPath());
 				SharedPreferences.Editor editor = prefs.edit();
 				editor.putInt("imageNumber", imageNumber);
 				editor.commit();
@@ -162,5 +165,26 @@ public class FingerPaintActivity extends Activity implements OnTouchListener{
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	MediaScannerConnection mc;
+	public void scanMedia(final String fp) {
+		this.mc = new MediaScannerConnection(this, new MediaScannerConnection.MediaScannerConnectionClient() {
+			public void onScanCompleted(String path, Uri uri) {
+				disconnect();
+			}
+			public void onMediaScannerConnected() {
+				scanFile(fp);
+			}
+		});
+		mc.connect();
+	}
+	
+	public void scanFile(String fp) {
+		mc.scanFile(fp, "image/png");
+	}
+	
+	public void disconnect() {
+		mc.disconnect();
 	}
 }
