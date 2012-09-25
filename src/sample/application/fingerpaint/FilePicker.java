@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -26,7 +27,8 @@ public class FilePicker extends ListActivity {
 		// TODO 自動生成されたメソッド・スタブ
 		setContentView(R.layout.filelist);
 		externalStorageDir = Environment.getExternalStorageDirectory().toString();
-		dir = externalStorageDir+"/text";
+		SharedPreferences pref = this.getSharedPreferences("MemoFilePickerPrefs", MODE_PRIVATE);
+		dir = pref.getString("Folder", externalStorageDir+"/text");
 		makeFileFilter();
 		makeComparator();
 		showList();
@@ -103,6 +105,11 @@ public class FilePicker extends ListActivity {
 		} else {
 			findViewById(R.id.button1).setEnabled(true);
 		}
+	}
+	
+	public void upButtonClick(View v) {
+		dir = new File(dir).getParent();
+		showList();
 	}
 
 }
