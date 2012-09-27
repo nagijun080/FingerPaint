@@ -27,13 +27,23 @@ public class FilePicker extends ListActivity {
 		// TODO 自動生成されたメソッド・スタブ
 		setContentView(R.layout.filelist);
 		externalStorageDir = Environment.getExternalStorageDirectory().toString();
-		SharedPreferences pref = this.getSharedPreferences("MemoFilePickerPrefs", MODE_PRIVATE);
-		dir = pref.getString("Folder", externalStorageDir+"/text");
+		SharedPreferences pref = this.getSharedPreferences("FilePickerPrefs", MODE_PRIVATE);
+		dir = pref.getString("Folder", externalStorageDir+"/mypaint");
 		makeFileFilter();
 		makeComparator();
 		showList();
 		
 		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO 自動生成されたメソッド・スタブ
+		SharedPreferences pref = this.getSharedPreferences("FilePickerPrefs", MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putString("Folder", dir);
+		editor.commit();
+		super.onStop();
 	}
 
 	public FilePicker() {
@@ -43,7 +53,7 @@ public class FilePicker extends ListActivity {
 	public void makeFileFilter() {
 		fFilter = new FileFilter () {
 			public boolean accept(File file) {
-				Pattern p = Pattern.compile("\\.txt$|\\.ini$|\\.xml$|\\.htm$|\\.csv$|\\.java$",Pattern.CASE_INSENSITIVE);
+				Pattern p = Pattern.compile("\\.png$|\\.jpg$|\\.gif$|\\.jpeg$|\\.bmp$",Pattern.CASE_INSENSITIVE);
 				Matcher m = p.matcher(file.getName());
 				boolean shown = (m.find() || file.isDirectory()) && ! file.isHidden();
 				return shown;
