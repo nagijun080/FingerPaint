@@ -62,7 +62,7 @@ public class FilePicker extends ListActivity {
 	}
 	
 	public void makeComparator() {
-		comparator = new Comparator<Object>() {
+		comparator = new Comparator<Object>() {//インナークラス
 			
 			public int compare(Object object1, Object object2) {
 				int pad1 = 0;

@@ -2,6 +2,7 @@ package sample.application.fingerpaint;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 
 import android.app.Activity;
@@ -131,14 +132,21 @@ public class FingerPaintActivity extends Activity implements OnTouchListener{
 
 	private boolean writeImage(File file) {
 		// TODO 自動生成されたメソッド・スタブ
+		FileOutputStream fo = null;
 		try {
-			FileOutputStream fo = new FileOutputStream(file);
+			fo = new FileOutputStream(file);
 			this.bitmap.compress(CompressFormat.PNG, 100, fo);
 			fo.flush();
 			fo.close();
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
 			return false;
+		}finally {
+			try {
+				fo.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
@@ -213,8 +221,9 @@ public class FingerPaintActivity extends Activity implements OnTouchListener{
 	}
 	
 	MediaScannerConnection mc;
-	public void scanMedia(final String fp) {
-		this.mc = new MediaScannerConnection(this, new MediaScannerConnection.MediaScannerConnectionClient() {
+	public void scanMedia(final String fp) { //fp = "hoge"ができない
+		this.mc = new MediaScannerConnection(this,
+				new MediaScannerConnection.MediaScannerConnectionClient() {
 			public void onScanCompleted(String path, Uri uri) {
 				disconnect();
 			}
