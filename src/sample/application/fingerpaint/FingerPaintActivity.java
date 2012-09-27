@@ -228,7 +228,7 @@ public class FingerPaintActivity extends Activity implements OnTouchListener{
 				disconnect();
 			}
 			public void onMediaScannerConnected() {
-				scanFile(fp);
+					scanFile(fp);
 			}
 		});
 		mc.connect();
